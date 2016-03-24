@@ -5,7 +5,7 @@
   <artifactId>meli-melo</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>bds</name>
+  <name>meli-melo</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
