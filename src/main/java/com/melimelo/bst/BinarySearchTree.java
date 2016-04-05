@@ -2,32 +2,11 @@ package com.melimelo.bst;
 
 /**
  * Binary search tree. Does not allow duplicate values.
- * #TODO : add height and
- *         derive from this a threaded binary tree i.e
- *         left child that are null need to point to the parent predecessor
- *         right child that are null point to the parent successor
- *         the min has no predecessor
- *         the max has no successor
- *         store are nodes by key
- *         do inorder by key 
- *         for each key in the ordered order 
- *             get the node object by the key 
- *             if the node has a left child null and is the key is not the first
- *                 get the predecessor key
- *                 get the predecessor node
- *                 and set the left child to point ot the predecessor
- *             if the node has a right child null and the key is not the last
- *                 get the successor key
- *                 get the successor node
- *                 and set the right child to point ot the successor
- *          How to test
- *          What's the complexity (memory and speed) ?
  */
 public class BinarySearchTree<T extends Comparable<T>> {
 
     public static int RECURSIVE_STRATEGY = 1;
     public static int ITERATIVE_STRATEGY = 2;
-    private final double LOG_2 = Math.log((double)2);
     private Node<T> m_root;
     private int m_size;
 
@@ -39,6 +18,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Create a new instance and set the root with a specific value.
+     * 
      * @param rootValue the value of the root to set.
      */
     public BinarySearchTree(final T rootValue) {
@@ -56,7 +36,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
     /**
      * Insert a new value in the three. If the value already exists in the tree
      * then no value will be added.
-     * @param  value the value to insert.
+     * 
+     * @param value the value to insert.
      * @return A reference to the node with the value inserted.
      */
     public Node<T> insert(final T value) {
@@ -65,16 +46,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Insert a new value in the three.
-     * @param  value    The value to insert.
-     * @param  strategy The strategy to use for insertion.
-     * @return          A reference to the node with the value inserted.
+     * 
+     * @param value The value to insert.
+     * @param strategy The strategy to use for insertion.
+     * @return A reference to the node with the value inserted.
      */
     public Node<T> insert(final T value, final int strategy) {
-        if(strategy == RECURSIVE_STRATEGY) {
+        if (strategy == RECURSIVE_STRATEGY) {
             return recursiveInsert(m_root, value);
         }
 
-        if(strategy == ITERATIVE_STRATEGY) {
+        if (strategy == ITERATIVE_STRATEGY) {
             return iterativeInsert(value);
         }
 
@@ -83,68 +65,59 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * insert an new node using an iterative strategy.
-     * @param  value the value to insert.
+     * 
+     * @param value the value to insert.
      * @return A reference to the node with the value inserted.
      */
     private Node<T> iterativeInsert(final T value) {
         Node<T> nodeToInsert = new Node<T>(value);
-        if(isEmpty()) {
+        if (isEmpty()) {
             m_root = nodeToInsert;
             m_size++;
-        }else{
+        } else {
             Node<T> parent = m_root;
             boolean nodeInserted = false;
-            while(!nodeInserted) {
+            while (!nodeInserted) {
                 int comparisonResult = parent.value().compareTo(value);
 
-                if(comparisonResult == 0) {
+                if (comparisonResult == 0) {
                     return parent;
                 }
 
-                if(comparisonResult > 0) {
-                    if(parent.left() != null) {
+                if (comparisonResult > 0) {
+                    if (parent.left() != null) {
                         parent = parent.left();
-                    }else{
+                    } else {
                         parent.setLeft(nodeToInsert);
                         nodeInserted = true;
-                        m_size ++;
+                        m_size++;
                     }
-                }else if(comparisonResult < 0) {
-                    if(parent.right() != null) {
+                } else if (comparisonResult < 0) {
+                    if (parent.right() != null) {
                         parent = parent.right();
-                    }else{
+                    } else {
                         parent.setRight(nodeToInsert);
                         nodeInserted = true;
-                        m_size ++;
+                        m_size++;
                     }
                 }
             }
         }
         return nodeToInsert;
     }
-    
-    // #TODO review this
-    /*
-        insert(node:Node, value:T):Node
-            if node == null
-                return Node(value)
-            if node.value < value
-                node.right = insert(node.right, value)
-            if node.value > value
-                node.left = insert(node.left, value)
-            return node.
-    */
+
     /**
      * insert an new node using a recursive strategy.
-     * @param  value the value to insert.
+     * 
+     * @param value the value to insert.
      * @return A reference to the node with the value inserted.
      */
     private Node<T> recursiveInsert(final Node<T> node, final T value) {
 
-        if(node == null) {
+        if (node == null) {
             Node<T> newNode = new Node<T>(value);
-            if(node == m_root) {
-                m_size ++;
+            if (node == m_root) {
+                m_size++;
                 m_root = newNode;
             }
             return newNode;
@@ -153,34 +126,34 @@ public class BinarySearchTree<T extends Comparable<T>> {
         int comparisonResult = node.value().compareTo(value);
 
         // the value already exists stop.
-        if(comparisonResult == 0) {
+        if (comparisonResult == 0) {
             return node;
         }
 
-        // if the value to insert is lower than the insertion node value then 
-        // recursively insert into the left child if it exists. 
+        // if the value to insert is lower than the insertion node value then
+        // recursively insert into the left child if it exists.
         // If the left child doesn't exist then create a new one and return it.
-        if(comparisonResult > 0) {
-            if(node.left() != null) {
+        if (comparisonResult > 0) {
+            if (node.left() != null) {
                 return recursiveInsert(node.left(), value);
-            }else{
+            } else {
                 Node<T> leftChild = new Node<T>(value);
                 node.setLeft(leftChild);
-                m_size ++;
+                m_size++;
                 return leftChild;
             }
         }
 
-        // if the value to insert is bigger than the insertion node value then 
-        // recursively insert into the right child if it exists. 
+        // if the value to insert is bigger than the insertion node value then
+        // recursively insert into the right child if it exists.
         // If the left right doesn't exist then create a new one and return it.
-        if(comparisonResult < 0) {
-            if(node.right() != null) {
+        if (comparisonResult < 0) {
+            if (node.right() != null) {
                 return recursiveInsert(node.right(), value);
-            }else{
+            } else {
                 Node<T> rightChild = new Node<T>(value);
                 node.setRight(rightChild);
-                m_size ++;
+                m_size++;
                 return rightChild;
             }
         }
@@ -192,9 +165,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Search a value in the tree.
-     * @param  value the value to search.
-     * @return       A node  with the value specified, null if the value is
-     *               not present in the tree.
+     * 
+     * @param value the value to search.
+     * @return A node with the value specified, null if the value is not present
+     *         in the tree.
      */
     public Node<T> search(final T value) {
         return search(value, ITERATIVE_STRATEGY);
@@ -202,18 +176,19 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Search a value in the tree.
-     * @param  value    the value to search.
-     * @param  strategy the strategy to use for searching. The strategy allowed are
-     *                  RECURSIVE_STRATEGY or ITERATIVE_STRATEGY.
-     * @return          A node  with the value specified, null if the value is
-     *                  not present in the tree.
+     * 
+     * @param value the value to search.
+     * @param strategy the strategy to use for searching. The strategy allowed
+     *            are RECURSIVE_STRATEGY or ITERATIVE_STRATEGY.
+     * @return A node with the value specified, null if the value is not present
+     *         in the tree.
      */
     public Node<T> search(final T value, final int strategy) {
-        if(strategy == RECURSIVE_STRATEGY) {
+        if (strategy == RECURSIVE_STRATEGY) {
             return recursiveSearch(m_root, value);
         }
 
-        if(strategy == ITERATIVE_STRATEGY) {
+        if (strategy == ITERATIVE_STRATEGY) {
             return iterativeSearch(value);
         }
 
@@ -222,18 +197,19 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Search recursively a value.
-     * @param  value the value to search.
-     * @return       A node with the value to search, null if not found.
+     * 
+     * @param value the value to search.
+     * @return A node with the value to search, null if not found.
      */
     private Node<T> iterativeSearch(final T value) {
         Node<T> node = m_root;
-        while(node != null) {
+        while (node != null) {
             int comparisonResult = node.value().compareTo(value);
-            if(comparisonResult == 0) {
+            if (comparisonResult == 0) {
                 return node;
-            }else if(comparisonResult > 0) {
+            } else if (comparisonResult > 0) {
                 node = node.left();
-            }else if(comparisonResult < 0) {
+            } else if (comparisonResult < 0) {
                 node = node.right();
             }
         }
@@ -242,20 +218,21 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Search recursively a value in a sutree with the provide node as root.
-     * @param  value the value to search.
-     * @param  node  the root node of the subtree.
-     * @return       A node with the value to search, null if not found.
+     * 
+     * @param value the value to search.
+     * @param node the root node of the subtree.
+     * @return A node with the value to search, null if not found.
      */
-    private Node<T>  recursiveSearch(final Node<T> node, final T value) {
-        if(node == null) {
+    private Node<T> recursiveSearch(final Node<T> node, final T value) {
+        if (node == null) {
             return null;
         }
 
-        int comparisonResult = node.value().compareTo(value); 
-        if(comparisonResult == 0) {
+        int comparisonResult = node.value().compareTo(value);
+        if (comparisonResult == 0) {
             return node;
         }
-        if(comparisonResult > 0) {
+        if (comparisonResult > 0) {
             return recursiveSearch(node.left(), value);
         }
         return recursiveSearch(node.right(), value);
@@ -263,12 +240,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Verify if the tree contains a value.
-     * @param  value the value to check.
-     * @return       true if the value is not null and is contained in the tree,
-     *               false otherwise.
+     * 
+     * @param value the value to check.
+     * @return true if the value is not null and is contained in the tree, false
+     *         otherwise.
      */
     public boolean contains(final T value) {
-        if(value == null) {
+        if (value == null) {
             return false;
         }
 
@@ -276,25 +254,26 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return node != null && value.compareTo(node.value()) == 0;
     }
 
-    /** 
-     * Delete a value from the tree.
+    /**
+     * Delete a value from the tree. 
      * #TODO : split the function in smaller functions.
-     * @param  value the value to delete
-     * @return       A node with the value deleted. Null if there's no node
-     *               with the value to delete.
+     * 
+     * @param value the value to delete
+     * @return A node with the value deleted. Null if there's no node with the
+     *         value to delete.
      */
     public Node<T> delete(final T value) {
         Node<T> nodeToDelete = search(value);
 
-        if(nodeToDelete == null) {
+        if (nodeToDelete == null) {
             return null;
         }
 
         Node<T> parent = nodeToDelete.parent();
-        
+
         // Delete internal or leaf node
         if (parent != null) {
-            
+
             // Delete leaf node
             if (nodeToDelete.isLeaf()) {
                 if (nodeToDelete.isRightChild()) {
@@ -302,46 +281,46 @@ public class BinarySearchTree<T extends Comparable<T>> {
                 } else if (nodeToDelete.isLeftChild()) {
                     parent.setLeft(null);
                 }
-                
-            // The node to delete has only the left child
+
+                // The node to delete has only the left child
             } else if (nodeToDelete.right() == null) {
-                
-                // replace 
+
+                // replace
                 if (nodeToDelete.isRightChild()) {
                     parent.setRight(nodeToDelete.left());
                 } else if (nodeToDelete.isLeftChild()) {
                     parent.setLeft(nodeToDelete.left());
                 }
-                
-            // The node to delete has only the right child
+
+                // The node to delete has only the right child
             } else if (nodeToDelete.left() == null) {
                 if (nodeToDelete.isRightChild()) {
                     parent.setRight(nodeToDelete.right());
                 } else if (nodeToDelete.isLeftChild()) {
                     parent.setLeft(nodeToDelete.right());
                 }
-            
-            // The node to delete has two children
+
+                // The node to delete has two children
             } else {
 
                 // The successor (i.e the min the right child) will replace him
                 Node<T> successor = min(nodeToDelete.right());
-                
+
                 // if the succesor is not a direct child of the node to delete
                 if (successor.parent() != nodeToDelete) {
-                    
+
                     // then the right child will replace him.
                     Node<T> successorParent = successor.parent();
-                    
+
                     // when the successor is not a direct child of the node
                     // to delete then it must be a left child.
                     // Hence we set the left child here.
                     successorParent.setLeft(successor.right());
-                    
-                    // 
+
+                    //
                     successor.setRight(nodeToDelete.right());
                 }
-                
+
                 parent.setRight(successor);
                 successor.setLeft(nodeToDelete.left());
 
@@ -349,46 +328,46 @@ public class BinarySearchTree<T extends Comparable<T>> {
             nodeToDelete.setParent(null);
         } else {
             // delete the root
-            
+
             // the root has no child then we have nothing to do
-            if(nodeToDelete.isLeaf()){
-                
+            if (nodeToDelete.isLeaf()) {
+
                 m_root = null;
-            
-            // the root has only one left child. He will take his place
+
+                // the root has only one left child. He will take his place
             } else if (nodeToDelete.right() == null) {
-               m_root = nodeToDelete.left();
-               m_root.setParent(null);
-                
-            // the root has only one right child
+                m_root = nodeToDelete.left();
+                m_root.setParent(null);
+
+                // the root has only one right child
             } else if (nodeToDelete.left() == null) {
                 m_root = nodeToDelete.right();
                 m_root.setParent(null);
-                
-            // the root has two children. the successor will replace him.
-            }else {
+
+                // the root has two children. the successor will replace him.
+            } else {
                 Node<T> successor = min(nodeToDelete.right());
-                
+
                 // if the successor is not a direct child of the node to delete
                 if (successor.parent() != nodeToDelete) {
-                    
+
                     // then the right child will replace him.
                     Node<T> successorParent = successor.parent();
-                    
+
                     // when the successor is not a direct child of the node
                     // to delete then it must be a left child.
                     // Hence we set is as a left child here.
                     successorParent.setLeft(successor.right());
                     successor.setRight(nodeToDelete.right());
                 }
-                                
+
                 successor.setLeft(nodeToDelete.left());
                 m_root = successor;
                 m_root.setParent(null);
             }
-            
+
         }
-        m_size --;
+        m_size--;
         return nodeToDelete;
     }
 
@@ -397,7 +376,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
      */
     public Node<T> min() {
 
-        if(isEmpty()){
+        if (isEmpty()) {
             return null;
         }
         return min(m_root);
@@ -405,12 +384,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Search the minimum value in a subtree.
-     * @param  root the subtree root node.
+     * 
+     * @param root the subtree root node.
      * @return the Node with the minimum value in the subtree.
      */
     private Node<T> min(final Node<T> root) {
         Node<T> node = root;
-        while(node.left() != null) {
+        while (node.left() != null) {
             node = node.left();
         }
         return node;
@@ -420,8 +400,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
      * @return The node with the maximum value in the tree.
      */
     public Node<T> max() {
-
-        if(isEmpty()) {
+        if (isEmpty()) {
             return null;
         }
         return max(m_root);
@@ -429,36 +408,38 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Search the maximum value in a subtree.
-     * @param  root the subtree root node.
+     * 
+     * @param root the subtree root node.
      * @return the Node with the maximum value in the subtree.
      */
     private Node<T> max(final Node<T> root) {
         Node<T> node = root;
-        while(node.right() != null) {
+        while (node.right() != null) {
             node = node.right();
         }
         return node;
     }
 
     /**
-     * Get the successor of a value. Here the successor of a value is the
-     * value that come right after the specified value in the order specified
-     * by an in-order traversal.
-     * @param  value the value for which to get the successor.
-     * @return       A node with the successor value.
+     * Get the successor of a value. Here the successor of a value is the value
+     * that come right after the specified value in the order specified by an
+     * in-order traversal.
+     * 
+     * @param value the value for which to get the successor.
+     * @return A node with the successor value.
      */
     public Node<T> successor(final T value) {
         Node<T> node = search(value);
-        if(node == null) {
+        if (node == null) {
             return null;
         }
 
-        if(node.right() != null) {
+        if (node.right() != null) {
             return min(node.right());
         }
 
         Node<T> successor = node.parent();
-        while(successor != null && node == successor.right()) {
+        while (successor != null && node == successor.right()) {
             node = successor;
             successor = successor.parent();
         }
@@ -469,22 +450,23 @@ public class BinarySearchTree<T extends Comparable<T>> {
      * Get the predecessor of a value. Here the predecessor of a value is the
      * value that come right before the specified value in the order specified
      * by an in-order traversal.
-     * @param  value the value for which to get the predecessor.
-     * @return       A node with the predecessor value.
+     * 
+     * @param value the value for which to get the predecessor.
+     * @return A node with the predecessor value.
      */
     public Node<T> predecessor(final T value) {
         Node<T> node = search(value);
 
-        if(node == null) {
+        if (node == null) {
             return null;
         }
 
-        if(node.left() != null) {
+        if (node.left() != null) {
             return max(node.left());
         }
 
         Node<T> predecessor = node.parent();
-        while(predecessor != null && node == predecessor.left()) {
+        while (predecessor != null && node == predecessor.left()) {
             node = predecessor;
             predecessor = predecessor.parent();
         }
@@ -492,7 +474,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     /**
-     * @return true it the tree is empty, falste otherwise.
+     * @return true it the tree is empty, false otherwise.
      */
     public boolean isEmpty() {
         return m_root == null;
@@ -507,16 +489,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     /**
      * Remove all elements from the tree.
+     * #TODO : find if there's an efficient way to do this (post order + deleting leaf nodes ?);
      */
     public void clear() {
-        // nlogn =>  (min=> log(n) + delete=>log(n)) * n => n^2 if the tree is alist ?
-        // can we do a post order and start by deleting a node that is leaf => O(n) ?
-        while(!isEmpty()) {
+        while (!isEmpty()) {
             delete(min().value());
         }
-    }
-
-    private int log2(final int value) {
-        return Double.valueOf(Math.log((double) value) / LOG_2).intValue();
     }
 }
